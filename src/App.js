@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Newsfeed from './pages/Newsfeed';
+import Timeline from './pages/Timelines';
+import AllMessage from './pages/AllMessage';
+import Photos from './pages/Photos';
+import AboutUser from './pages/AboutUser';
+import Videos from './pages/Videos';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import PostDetail from './pages/PostDetail';
 
-function App() {
+
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   <>
+      
+        <BrowserRouter> 
+          <Header />     
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/newsfeed/" component={Newsfeed} />
+            <Route exact path="/timeline/" component={Timeline} />
+            <Route exact path="/messages/" component={AllMessage} />
+            <Route exact path="/photos/" component={Photos} />
+            <Route exact path="/aboutme/" component={AboutUser} />
+            <Route exact path="/videos/" component={Videos} />
+            <Route exact path="/signup/" component={SignUp} />
+            <Route exact path="/posts/:postId/" component={PostDetail} />
+          </Switch>
+        </BrowserRouter>
+      <Footer />
+   </> 
+  )
 }
-
-export default App;
