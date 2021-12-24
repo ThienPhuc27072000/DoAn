@@ -2,68 +2,40 @@ import React, {useState, useRef} from 'react';
 import API, { endpoints } from "../../../API";
 import { useHistory } from 'react-router';
 import cookies from 'react-cookies';
-import { useSelector } from 'react-redux';
-// import { propTypes } from 'react-bootstrap/esm/Image';
 
 export default function FormCreatePost(props) {
     const [posts, setPosts] = useState(null)
     const [addPostContent, setAddPostContent] = useState(null);
     const [addPostTag, setAddPostTag] = useState([]);
-	const addPostImg= useRef(null)
+	const addPostImg= useRef()
 	const history = useHistory()
-    const [changed, setChanged] = useState(1)
-
-    const addPost = async (event) => {
+                
+    let addNewPost = async (event) => {
         event.preventDefault();
+		const formData = new FormData()
+		formData.append("content", addPostContent)
+		formData.append("image", addPostImg.current.files[0])
+        formData.append("tags", addPostTag)
+
         try {
-            let res = await API(endpoints['posts'], {
-                method: 'POST',
+            let res = await API.post(endpoints['posts'], formData, {
                 headers: {
-                    "Authorization": `Bearer ${cookies.load("access_token")}`
-                  },
-                data: {
-                    "content": addPostContent,
-                    "image": addPostImg.current.files[0],
-                    // "tags": addPostTag,
+                    "Authorization": `Bearer ${cookies.load("access_token")}`,
+                    "Content-Type": "multipart/form-data"
                 }
             })
             console.info(res.data)
-            // posts.push(res.data)
-            setPosts(posts)
-            setChanged(posts.length)
+            history.push("/newsfeed")
         } catch (err) {
             console.error(err)
-        }  
-                
-        let addNewPost = async () => {
-			const formData = new FormData()
-			formData.append("content", addPostContent)
-			// formData.append("addPostTag", addPostTag)
-            // let files = image.current.files;
-            // for (let i = 0; i < files.length; i++) {
-            //     formData.append("image_items", files[i])
-            // } code của Huy
-			formData.append("image", addPostImg.current.files[0])
-            try {
-                let res = await API(endpoints['posts'], formData, {
-                    method: 'POST',
-                    headers: {
-                        // "Authorization": `Bearer ${cookies.load("access_token")}`,
-                        "Content-Type": "multipart/form-data"
-                    }
-                })
-                console.info(res.data)
-                history.push("/newsfeed")
-            } catch (err) {
-                console.error(err)
-            }
-            // if(addPostContent !== null || addPostImg !== null) {
-            //     addNewPost()
-            // }
-            props.addPost(formData)
+        }
+        if(addPostContent === null || addPostImg === null) {
+            alert("You have to write content or image let create post")
         }
     }
-
+    const refreshPage = () => {
+        window.location.reload();
+    }
     return (
         <>
         <div className="modal-newpost js-modal-newpost">
@@ -75,7 +47,7 @@ export default function FormCreatePost(props) {
                     Add New Post
                 </div>
                 <div className="modal-body-newpost">
-                    <form onSubmit={addPost}>
+                    <form onSubmit={addNewPost}>
                         <label className="modal-label-newpost" for="">Content</label>
                         <div className="input-add-newpost">
                             <input type="text" className="modal-input-newpost" placeholder="Content"
@@ -92,7 +64,7 @@ export default function FormCreatePost(props) {
                             />
                         </div>
                         <div className="modal-footer-newpost">
-                            <button type="submit" id="add-newpost">Add Post</button>
+                            <button type="submit" id="add-newpost" onClick={refreshPage}>Add Post</button>
                         </div>
                     </form>
                 </div>

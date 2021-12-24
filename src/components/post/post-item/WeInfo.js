@@ -1,75 +1,73 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { useParams } from "react-router";
+import API, { endpoints } from "../../../API";
+import cookies from 'react-cookies';
 
-export default function WeInfo() {
+
+export default function WeInfo(props) {
+    const [like, setLike] = useState(null)
+    // let {postId} = useParams()
+    const postId = props.postId
+
+    const handleClick = () => {
+        setLike(like + 1);
+    }
+    const label = like ? 'Unlike' : 'Like';
+
+    let likePost = async (event) => {
+        event.preventDefault();
+        try {
+            let res = await API.post(endpoints['take-action'](postId), {
+                headers: {
+                    "Authorization": `Bearer ${cookies.load("access_token")}`
+                  },
+            })
+            setLike(res.data)
+            console.info(res.data)
+            like.push(res.data)
+            setLike(like)
+        } catch (err) {
+            console.error(err)
+        }     
+    } 
+    
+    useEffect(() => {
+        // let takeAction = async() => {
+        //     try {
+        //         let res = await API.post(endpoints['take-action'](postId))
+        //         setLike(res.data.results)
+        //     } catch(err) {
+        //         console.error(err)
+        //     }
+        // }
+        // takeAction()
+
+        // const btnLike = document.querySelector('.btn-like')
+        // const likePostChange = document.querySelector('.btn-like')
+        // function likePost() {
+        //     likePostChange.classList.add('isLiked')
+        //     btnLike.classList.add('isLiked')
+        // }
+        // btnLike.addEventListener('click', likePost);
+        // return () => {
+        //   btnLike.removeEventListener('click', likePost);
+        // }
+    }, []);
     return(
         <>
         <div className="we-video-info">
-            <ul>
-                <WeinfoItem class="views" title="views" icon="fa fa-eye" quantity="1.2k"/>
-                <WeinfoItem class="comment" title="comments" icon="fa fa-comments-o" quantity="52"/>
-                <WeinfoItem class="like" title="like" icon="ti-heart" quantity="2.2k"/>
-                <WeinfoItem class="dislike" title="dislike" icon="ti-heart-broken" quantity="200"/>
-                <li class="social-media">
-                    <IconSocialMedia />
-                </li>
-            </ul>
-            <div className="input-auction">
+            <div onClick={likePost}>
+                <button className="btn-like" onClick={handleClick}> {label} 
+                    <FontAwesomeIcon className="icon-like" icon={faThumbsUp}></FontAwesomeIcon>
+                </button>
+            </div>
+            {/* <div className="input-auction">
                 <input type="text" placeholder="Input price you want to auction (VNĐ)" /> 
             </div>
-            <p className="note-auction">Only enter once</p>
-            
+            <p className="note-auction">Only enter once</p>             */}
         </div>
         </>
     )
-}
-
-class WeinfoItem extends React.Component {
-    render() {
-        return(
-            <>
-            <li>
-                <span className={this.props.class} data-toggle="tooltip" title={this.props.title}>
-                    <i className={this.props.icon}></i>
-                    <ins>{this.props.quantity}</ins>
-                </span>
-            </li>
-            </>
-        )
-    }
-}
-
-class IconSocialMedia extends React.Component {
-    render() {
-        return(
-            <>
-            <div className="menu">
-                <div className="btn trigger">
-                    <i className="fa fa-share-alt"></i>
-                </div>
-                <RoraterItem classIcon="fa fa-html5" />
-                <RoraterItem classIcon="fa fa-facebook" />
-                <RoraterItem classIcon="fa fa-google-plus" />
-                <RoraterItem classIcon="fa fa-twitter" />
-                <RoraterItem classIcon="fa fa-css3" />
-                <RoraterItem classIcon="fa fa-instagram" />
-                <RoraterItem classIcon="fa fa-dribbble" />
-                <RoraterItem classIcon="fa fa-pinterest" />
-            </div>
-            </>
-        )
-    }
-}
-
-class RoraterItem extends React.Component {
-    render() {
-        return(
-            <>
-            <div className="rotater">
-                <div className="btn btn-icon">
-                    <a href="#" title=""><i className={this.props.classIcon}></i></a>
-                </div>
-            </div>
-            </>
-        )
-    }
 }

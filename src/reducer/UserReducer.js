@@ -1,6 +1,5 @@
 import cookies from 'react-cookies';
 
-
 const initState = {
     "user": cookies.load('user')
 }

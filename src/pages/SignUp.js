@@ -5,7 +5,6 @@ import ImgSignup from '../csslogin/images/bg-registration-form-1.jpg';
 
 
 export default function SignUp() {
-	// var backgroundSignup = { backgroundImage: "url(" + "./images/bg-registration-form-1.jpg" + ")", };
 	var backgroundSignup = {backgroundImage: "url(" + { ImgSignup } + ")"}
 	
 	const [firstName, setFirstName] = useState()
@@ -19,7 +18,6 @@ export default function SignUp() {
 	const avatar = useRef()
 	const [gender, setGender] = useState()
 	const history = useHistory()
-
 
 	const register = (event) => {
 		event.preventDefault()
@@ -48,7 +46,6 @@ export default function SignUp() {
 				console.error(err)
 			}
 		}
-
 		if(password !== null && password === confirmPassword) {
 			registerUser()
 		}

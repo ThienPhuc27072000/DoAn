@@ -8,8 +8,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import cookies from "react-cookies";
 
-
-
 export default function PostDetail(props) {
   const [post, setPost] = useState(null)
   const [comments, setComments] = useState([])
@@ -36,8 +34,8 @@ export default function PostDetail(props) {
           console.error(err)
       }
     }
-    loadPost()
     loadComments()
+    loadPost()    
   }, [changed])
 
   let addComment = async (event) => {
@@ -59,6 +57,28 @@ export default function PostDetail(props) {
     }
   }
 
+  let deletePost = async (event) => {
+    event.preventDefault();
+    try {
+        let res = await API.delete(endpoints['delete-post'](postId), {
+            headers: {
+                "Authorization": `Bearer ${cookies.load("access_token")}`
+              },
+        })
+        setPost(res.data)
+        console.info(res.data)
+        post.push(res.data)
+        setPost(post)
+        setChanged(post.length)
+    } catch (err) {
+        console.error(err)
+    }     
+  } 
+
+    const refreshPage = () => {
+        window.location.reload();
+    }
+
   if(post === null)
     return <Spinner animation="border" />
 
@@ -66,7 +86,7 @@ export default function PostDetail(props) {
   if(user !== null && user !== undefined) {
     comment = 
               <>
-                  <div className="comet-avatar">
+                  <div className="comet-avatar fix-img-post">
                       <img src={props.imgAvatar} alt=""/>
                   </div>
                   <div className="post-comt-box">
@@ -78,7 +98,6 @@ export default function PostDetail(props) {
                   </div>
               </>
   }
-  
   return(
       <>
       <div className="theme-layout">
@@ -86,61 +105,60 @@ export default function PostDetail(props) {
           <div className="gap gray-bg">
             <div className="container-fluid">
               <div className="row">
-                <div className="row" id="page-contents">
-                  <div className="col-lg-6">
-                      <div className="central-meta item">
-                        <div className="user-post">
-                          <div className="friend-info">
-                            <figure className="img-avatar">
-                              <img style={{width: "70%"}} src={post.creator.avatar} alt="" />
-                            </figure>
-                            <div className="friend-name">
-                              <ins>
-                                <a href="/timeline" title="">{post.creator.username}</a>
-                              </ins>
-                            </div>
-                            <div className="description-detail">
-                              <p>Tag: {post.tags.map(t => <Badge className="tag" bg="secondary"> {t.name} </Badge>)}</p>
-                              {/* <p>Title: {post.title}</p> */}
-                              <p>{post.content}</p>
-                            </div>
-                            <div class="post-meta">
-                              {/* <iframe width="560" height="315" title="YouTube video player"
-                                  src="https://www.youtube.com/embed/TTaTni6y464"  
-                                  frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
-                                  encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                              </iframe> */}
-                              <img src={post.image} alt="ảnh bài post"></img>       
-                            </div> 
-                            <WeInfo />  
+                {/* <div className="row" id="page-contents"> */}
+                  {/* <div className="col-lg-6"> */}
+                    <div className="central-meta item fix-post-area">
+                      <div className="user-post">
+                        <div className="friend-info">
+                          <figure className="img-avatar fix-img-post">
+                            <img style={{width: "70%"}} src={post.creator.avatar} alt="" style={{width: "100%"}}/>
+                          </figure>
+                          <div className="friend-name">
+                            <ins>
+                              <a href="/timeline" title="">{post.creator.username}</a>
+                            </ins>
+                            <i className="ti-more-alt icon-three-dot">
+                                <ul className="choose">
+                                    <li className='choose-item'><Link to="#">Update Post</Link></li>
+                                    <li className='choose-item'>
+                                        <Link to="/newsfeed" onClick={deletePost}>Delete Post</Link>
+                                    </li>
+                                </ul>
+                            </i>
                           </div>
+                          <div className="description-detail">
+                            <p>Tag: {post.tags.map(t => <Badge className="tag" bg="secondary"> {t.name} </Badge>)}</p>
+                            <p>{post.content}</p>
+                          </div>
+                          <div class="post-meta">
+                            <img src={post.image} alt="ảnh bài post"></img>       
+                          </div> 
+                          <WeInfo />  
                         </div>
                       </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="central-meta item">
+                    </div>
+                  {/* </div> */}
+                  {/* <div className="col-lg-6"> */}
+                    <div className="central-meta item fix-cmt-area">
                       <div className="user-post">
                         <div className="friend-info">
                           <h3>Comment Area</h3>
                         </div>
                         {/* Comment */}
                         {comment}
-                        <div className="fix-coment-area">
-                          
+                        <div className="fix-coment-area">              
                           <ul className="we-comet">
                             {comments.map(c => 
-                              <Comment imgAvatar={c.creator.avatar}
+                              <Comment commentId={c.id} imgAvatar={c.creator.avatar}
                               nameUser={c.creator.username} timeComment={c.created_date}  
                               contentComment={c.content} />  
                             )}
-                            {/* <li><a href="#" title="" className="showmore underline">More comments</a></li> */}
-                            {/* <li className="post-comment"></li> */}
                           </ul>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>	
+                  {/* </div> */}
+                {/* </div>	 */}
               </div>
             </div>
           </div>	

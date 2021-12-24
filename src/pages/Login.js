@@ -12,8 +12,6 @@ import '../csslogin/fonts/Linearicons-Free-v1.0.0/icon-font.min.css';
 import { loginUser } from '../actionCreator/UserCreator';
 // import ImgLogin from '../csslogin/images/bg-01.jpg';
 
-
-
 export default function Login() {
 	// var backgroundLogin = {backgroundImage: "url(" + { ImgLogin } + ")"}
     var backgroundLogin = { backgroundImage: "url(" + "../csslogin/images/bg-01.jpg" + ")", };

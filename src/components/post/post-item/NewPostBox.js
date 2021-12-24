@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 export default function NewPostBox() {
     useEffect(() => {
         const createPostBtn = document.querySelector('#add-newpost-modal')
-        // const createPostBtn = document.querySelector('#add-newpost-modal')
         const modalNewPost = document.querySelector('.js-modal-newpost')
         const modalCloseNewPost = document.querySelector('.js-modal-close-newpost')
         function showCreatePost() {
@@ -45,27 +44,7 @@ export default function NewPostBox() {
     }
     return(
         <>
-        {/* <div className="central-meta item">
-            <div className="new-postbox">
-                <button id="add-newpost-modal">Create New Post</button>
-            </div>
-        </div> */}
         {addPost}
         </>
     )
 }
-
-// class IconItem extends React.Component {
-//     render() {
-//         return(
-//             <>
-//             <li> 
-//                 <label className="fileContainer">
-//                     <i className={this.props.icon}></i>
-//                     <input type="file"/>
-//                 </label>
-//             </li>
-//             </>
-//         )
-//     }
-// }

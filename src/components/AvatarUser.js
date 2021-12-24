@@ -48,7 +48,7 @@ export default function AvatarUser() {
                         <div className="col-lg-2 col-sm-3">
                             <div className="user-avatar">
                                 <figure>
-                                    <img src="images/resources/user-avatar.jpg" alt=""/>
+                                    <img src={user.avatar} alt=""/>
                                     {/* <img src={user.avatar} alt=""/> */}
                                     <form className="edit-phto">
                                         {/* <i className="fa fa-camera-retro"></i> */}
@@ -88,8 +88,6 @@ export default function AvatarUser() {
         </>
     )
 }
-
-
 class Path extends React.Component {
     render() {
         return(

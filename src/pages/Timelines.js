@@ -1,7 +1,6 @@
 import React from 'react'
 import Shortcuts from '../components/Shortcuts'
 import AvatarUser from '../components/AvatarUser';
-import NewPostBox from '../components/post/post-item/NewPostBox';
 import BodyPost from '../components/post/BodyPost';
 
 export default function Timeline() {

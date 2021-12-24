@@ -9,10 +9,12 @@ export let endpoints = {
     'current-user': '/users/current-user/',
     'register': '/users/',
     'post-detail': (postId) => `/posts/${postId}/`,
+    'update-post': (postId) => `/posts/${postId}/`,
     'get-comments': (postId) => `/posts/${postId}/get-comments/`,
     'add-comment': (postId) => `/posts/${postId}/add-comment/`,
     'delete-post': (postId) => `/posts/${postId}/`,
     'take-action': (postId) => `/posts​/${postId}​/take-action​/`,
+    'delete-comment': (commentId) => `/comments/${commentId}/`,
 }
 
 // export let AuthAPI = axios.create({
